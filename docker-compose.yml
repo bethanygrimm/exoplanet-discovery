@@ -1,0 +1,41 @@
+---
+version: "3"
+
+services:
+  redis-db:
+    image: redis:7
+    ports:
+      - 6379:6379
+    volumes:
+      - $PWD/data:/data:rw
+    user: "1000:1000"
+    command: ["--save", "1", "1"]
+  worker:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    depends_on:
+      - redis-db
+    image: bethanygrimm/exoplanet_api:1.0
+    environment:
+      - REDIS_IP=redis-db
+      - LOG_LEVEL=WARNING
+      - FLASK_IP=flask-ip
+    ports:
+      - "5001:5001"
+    command: ["src/worker.py"]
+  flask-app:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    depends_on:
+      - redis-db
+    image: bethanygrimm/exoplanet_api:1.0
+    environment:
+      - REDIS_IP=redis-db
+      - LOG_LEVEL=WARNING
+      - FLASK_IP=flask-ip
+    ports:
+      - "5000:5000"
+    command: ["src/api.py"]
+...
