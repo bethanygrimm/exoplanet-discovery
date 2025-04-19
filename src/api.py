@@ -176,6 +176,112 @@ def return_planet_info(pl_name: str) -> dict:
             if(is_planet):
                 return data
 
+#Route to return number of planets
+@app.route('/planets/number', methods=['GET'])
+def num_planets() -> str:
+    '''
+    This function returns the number of planets.
+
+    Args: none
+    Returns:
+        output (str): a simple string that returns the number of planets
+    '''
+    planet_list = return_planets()
+    num = len(planet_list)
+    output = "There are " + str(num) + " exoplanets in the database.\n"
+    return output
+
+#Route to return number of exoplanets found per facility
+@app.route('/planets/facilities', methods=['GET'])
+def planets_per_facility() -> dict:
+    '''
+    This function returns a dictionary with each facility name and the number of
+    planets discovered there.
+
+    Args: none
+    Returns:
+        data (dict): a dictionary containing information about how many planets
+        were discovered at each facility
+    '''
+    #Retrieve data from rd, iterate through list of dicts
+    #Then populate the dict with data and return
+    list_of_dicts = return_exoplanet_data()
+    facility_dict = {}
+
+    for i in list_of_dicts:
+        try:
+            facility = i["disc_facility"]
+        except KeyError:
+            #Possible that some dictionaries (i) have no value for "disc_facility"
+            #because the data is sparsely populated - in this case, skip
+            continue
+        if(facility_dict.get(facility, 0) == 0):
+            facility_dict[facility] = 1
+        else:
+            facility_dict[facility] += 1
+    return facility_dict
+
+#Route to return number of exoplanets found per year
+@app.route('/planets/years', methods=['GET'])
+def planets_per_year() -> dict:
+    '''
+    This function returns a dictionary with each year and the number of planets
+    discovered that year.
+
+    Args: none
+    Returns:
+        data (dict): a dictionary containing information about how many planets
+        were discovered each year
+    '''
+    #Retrieve data from rd, iterate through list of dicts
+    #Then populate the dict with data and return
+    list_of_dicts = return_exoplanet_data()
+    year_dict = {}
+
+    for i in list_of_dicts:
+        try:
+            year = i["disc_year"]
+        except KeyError:
+            #Possible that some dictionaries (i) have no value for "disc_year"
+            #because the data is sparsely populated - in this case, skip
+            continue
+        if(year_dict.get(year, 0) == 0):
+            year_dict[year] = 1
+        else:
+            year_dict[year] += 1
+    return year_dict
+
+#Route to return number of exoplanets found per method
+@app.route('/planets/methods', methods=['GET'])
+def planets_per_method() -> dict:
+    '''
+    This function returns a dictionary with each method and the number of planets
+    discovered via each method.
+
+    Args: none
+    Returns:
+        data (dict): a dictionary containing information about how many planets
+        were discovered via each discovery method
+    '''
+    #Retrieve data from rd, iterate through list of dicts
+    #Then populate the dict with data and return
+    list_of_dicts = return_exoplanet_data()
+    method_dict = {}
+
+    for i in list_of_dicts:
+        try:
+            method = i["discoverymethod"]
+        except KeyError:
+            #Possible that some dictionaries (i) have no value for 
+            #"discoverymethod" because the data is sparsely populated - in this
+            #case, skip
+            continue
+        if(method_dict.get(method, 0) == 0):
+            method_dict[method] = 1
+        else:
+            method_dict[method] += 1
+    return method_dict
+
 #Route to post a new job
 @app.route('/jobs', methods=['POST'])
 def post_job() -> str:
