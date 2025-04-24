@@ -3,3 +3,4 @@ requests
 redis
 hotqueue
 pytest
+matplotlib==3.10.1
