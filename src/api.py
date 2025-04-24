@@ -282,6 +282,76 @@ def planets_per_method() -> dict:
             method_dict[method] += 1
     return method_dict
 
+# Route to return average number of planets per system
+@app.route('/planets/average_planets', methods=['GET'])
+def avgerage_planets_per_system() -> str:
+    '''
+    This function calculates and returns the average number of planets per star system.
+
+    Args: None
+    Returns:
+        output (str): a string describing the average number of planets per system
+    '''
+    list_of_dicts = return_exoplanet_data()
+    system_planet_counts = {}
+
+    for planet in list_of_dicts:
+        try:
+            hostname = planet["hostname"]
+        except KeyError:
+            continue
+
+        if hostname not in system_planet_counts:
+            system_planet_counts[hostname] = 1
+        else:
+            system_planet_counts[hostname] += 1
+
+    total_systems = len(system_planet_counts)
+    total_planets = sum(system_planet_counts.values())
+
+    if total_systems == 0:
+        return "No star systems found to compute average.\n"
+
+    average = total_planets / total_systems
+    output = f"The average number of planets per system is {average:.2f}\n"
+    return output
+
+# Route to return average number of stars per system
+@app.route('/systems/average_stars', methods=['GET'])
+def avg_stars_per_system() -> str:
+    '''
+    This function calculates and returns the average number of stars per star system.
+
+    Args: None
+    Returns:
+        output (str): a string describing the average number of stars per system
+    '''
+    list_of_dicts = return_exoplanet_data()
+    system_star_counts = {}
+
+    for planet in list_of_dicts:
+        try:
+            hostname = planet["hostname"]
+            stars = planet["sy_snum"]
+        except KeyError:
+            continue
+
+        # Only record one star count per unique hostname
+        if hostname not in system_star_counts:
+            # Validate that stars is a number
+            if isinstance(stars, (int, float)):
+                system_star_counts[hostname] = stars
+
+    total_systems = len(system_star_counts)
+    total_stars = sum(system_star_counts.values())
+
+    if total_systems == 0:
+        return "No systems with valid star count found.\n"
+
+    average = total_stars / total_systems
+    output = f"The average number of stars per system is {average:.2f}\n"
+    return output
+
 #Route to post a new job
 @app.route('/jobs', methods=['POST'])
 def post_job() -> str:
@@ -363,6 +433,86 @@ def get_job_result(jid: str) -> dict:
         result_dict (dict): the dictionary containing all the results from a job
     '''
     return get_result(jid)
+
+@app.route('/help', methods=['GET'])
+def help() -> str:
+    '''
+    Returns a list of all available routes with their descriptions and example curl commands.
+    
+    Args: None
+    Returns:
+        help_text (str): help text with descriptions and curl examples for each route
+    '''
+    help_text = """
+
+Routes:
+-------
+1. GET /data
+   - Description: Returns all exoplanet data from Redis.
+   - curl: curl http://localhost:5000/data
+
+2. GET /planets
+   - Description: Returns a list of all planet names.
+   - curl: curl http://localhost:5000/planets
+
+3. GET /planets/<pl_name>
+   - Description: Returns data for a specific planet. Replace <pl_name> with planet name.
+   - curl: curl http://localhost:5000/planets/<pl_name>
+
+4. GET /planets/number
+   - Description: Returns the total number of planets in the dataset.
+   - curl: curl http://localhost:5000/planets/number
+
+5. GET /planets/facilities
+   - Description: Returns a count of discovery facilities.
+   - curl: curl http://localhost:5000/planets/facilities
+
+6. GET /planets/years
+   - Description: Returns a count of planets discovered by year.
+   - curl: curl http://localhost:5000/planets/years
+
+7. GET /planets/methods
+   - Description: Returns a count of discoveries by method.
+   - curl: curl http://localhost:5000/planets/methods
+
+8. GET /planets/average_planets 
+   - Description: Returns the average number of planets per system. 
+   - curl: curl http://localhost:5000/planets/average_planets
+
+9. GET /systems/average_stars 
+   - Description: Returns the average number of stars per system. 
+   - curl: curl http://localhost:5000/systems/average_stars
+
+10. GET /jobs
+   - Description: Lists all submitted jobs.
+   - curl: curl http://localhost:5000/jobs
+
+11. GET /jobs/<id>
+   - Description: Returns the input parameters and job type for a specific job. Replace <id> with job ID.
+   - curl: curl http://localhost:5000/jobs/<id>
+
+12. GET /results/<id>
+    - Description: Returns the result of a completed job. Replace <id> with job ID.
+    - curl: curl http://localhost:5000/results/<id>
+
+13. GET /help
+    - Description: Shows this help message with all available routes.
+    - curl: curl http://localhost:5000/help
+
+14. POST /data
+    - Description: Load exoplanet data into Redis.
+    - curl: curl -X POST http://localhost:5000/data
+
+15. POST /jobs
+    - Description: Submit a job with parameters in JSON format.
+    - curl: curl -X POST -H "Content-Type: application/json" -d '{"job_type":"planet_stats","pl_name":"Kepler-22 b"}' http://localhost:5000/jobs
+
+16. DELETE /data
+    - Description: Remove all data from Redis.
+    - curl: curl -X DELETE http://localhost:5000/data
+
+"""
+    return help_text
 
 #Debugging route
 @app.route('/debug', methods=['GET'])
