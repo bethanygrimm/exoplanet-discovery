@@ -27,24 +27,20 @@ def _generate_jid() -> str:
     '''
     return str(uuid.uuid4())
 
-def _instantiate_job(jid: str, status: str, start: int, end: int) -> dict:
+def _instantiate_job(jid: str, status: str, planet: str) -> dict:
     '''
     Generates a description of a job object as a dictionary
 
     Args:
         jid (str): a string that is the ID for a job
         status (str): the status of that job
-        start (int): starting value of data (discovery year), must be within 1992
-            and current year
-        end (int): ending value of data (discovery year), must be within 1992
-            and current year
+        planet (str): the planet whose system to visualize
     Returns:
         job_dict (dict): a dictionary containing all the args
     '''
     return {'id': jid,
             'status': status,
-            'start': start,
-            'end': end}
+            'planet': planet}
 
 def _save_job(jid: str, job_dict: dict) -> None:
     '''
@@ -84,19 +80,18 @@ def _add_result(jid: str) -> None:
     res.set(jid, temp_str)
     return
 
-def add_job(start: int, end: int, status="submitted") -> dict:
+def add_job(planet: str, status="submitted") -> dict:
     '''
     The function that generates ID and job description and adds it to the queue
 
     Args:
-        start: starting value of data (discovery year)
-        end: ending value of data (discovery year)
+        planet (str): the planet whose system to visualize
         status (str): the status of that job, by default, "submitted"
     Returns:
         job_dict (dict): the dictionary containing all the job information
     '''
     jid = _generate_jid()
-    job_dict = _instantiate_job(jid, status, start, end)
+    job_dict = _instantiate_job(jid, status, planet)
     _save_job(jid, job_dict) #save to jdb
     _queue_job(jid) #now add to queue
     _add_result(jid) #now add it to results database
@@ -151,6 +146,7 @@ def update_job_status(jid: str, status: str) -> None:
         raise Exception()
     return
 
+#Update these as needed for the image return
 def update_result(jid: str, result: dict) -> None:
     '''
     Update the result of a completed job to database "res"

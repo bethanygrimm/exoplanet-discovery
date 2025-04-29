@@ -359,12 +359,26 @@ def post_job() -> str:
     This posts a new job to the job database with user defined parameters
 
     Args: none. This function assumes the user's POST command included a JSON-
-        decipherable string with integer values for "start" and "end",
-        corresponding to the years the user wishes to retrieve data from
+        decipherable string with a value for "planet" corresponding to planet
+        name
     Returns:
         job_dict (dict): the dictionary containing the info of the job just posted
     '''
     content = request.get_json()
+    def_planet = return_planets()[0] #Default value
+
+    #Check if input is valid
+    #This try/except block should catch any key or type errors
+    try:
+        planet = content["pl_name"]
+    except (TypeError, KeyError):
+        print("Input invalid: defaulting to planet " + str(def_planet))
+        planet = def_planet
+    #Check if input is a planet
+    if(not (planet in return_planets())):
+        print("Planet invalid: defaulting to planet " + str(def_planet))
+        planet = def_planet
+    '''
     #The last valid index will be the current year
     current_date = date.today()
     current_year = current_date.year
@@ -393,8 +407,9 @@ def post_job() -> str:
     if(end < start):
         print("End year invalid: defaulting to " + str(start))
         end = start
+    '''
 
-    return add_job(start, end)
+    return add_job(planet)
 
 #Route to get all existing job ids
 @app.route('/jobs', methods=['GET'])
@@ -505,7 +520,7 @@ Routes:
 
 15. POST /jobs
     - Description: Submit a job with parameters in JSON format.
-    - curl: curl -X POST -H "Content-Type: application/json" -d '{"job_type":"planet_stats","pl_name":"Kepler-22 b"}' http://localhost:5000/jobs
+    - curl: curl -X POST -H "Content-Type: application/json" -d '{"pl_name":"Kepler-22 b"}' http://localhost:5000/jobs
 
 16. DELETE /data
     - Description: Remove all data from Redis.
@@ -517,7 +532,7 @@ Routes:
 #Debugging route
 @app.route('/debug', methods=['GET'])
 def debug_route() -> str:
-    return "Hello world!"
+    return "Hello world!\n"
 
 def main():
     #Run Flask
