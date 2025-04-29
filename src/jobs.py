@@ -147,16 +147,17 @@ def update_job_status(jid: str, status: str) -> None:
     return
 
 #Update these as needed for the image return
-def update_result(jid: str, result: dict) -> None:
+def update_result(jid: str, hkey: str result: dict) -> None:
     '''
     Update the result of a completed job to database "res"
 
     Args:
         jid (str): a string that is the ID for the job
+        hkey (str): the string for the specific hash
         result (dict): the result returned by worker script, in JSON format
     Returns: none
     '''
-    res.set(jid, json.dumps(result))
+    res.hset(jid, hkey, json.dumps(result))
     return
 
 def get_result(jid: str) -> dict:
