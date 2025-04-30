@@ -2,9 +2,9 @@ import pytest
 import json
 import os
 import requests
-from api import load_exoplanet_data, return_exoplanet_data, delete_exoplanet_data, return_planets, return_planet_info, num_planets, planets_per_facility, planets_per_year, planets_per_method, post_job, get_job_id_list, get_job_info, get_job_result, debug_route
+from api import load_exoplanet_data, return_exoplanet_data, delete_exoplanet_data, return_planets, return_planet_info, num_planets, planets_per_facility, planets_per_year, planets_per_method, avg_planets_per_system, avg_stars_per_system, post_job, get_job_id_list, get_job_info, download, help_route, debug_route
 
-_flask_ip = os.environ.get('FLASK_IP')
+_flask_ip = hostname
 
 response1 = requests.post(f'http://{_flask_ip}:5000/data')
 response2 = requests.get(f'http://{_flask_ip}:5000/data')

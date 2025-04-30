@@ -284,7 +284,7 @@ def planets_per_method() -> dict:
 
 # Route to return average number of planets per system
 @app.route('/planets/average_planets', methods=['GET'])
-def avgerage_planets_per_system() -> str:
+def avg_planets_per_system() -> str:
     '''
     This function calculates and returns the average number of planets per star system.
 
@@ -354,7 +354,7 @@ def avg_stars_per_system() -> str:
 
 #Route to post a new job
 @app.route('/jobs', methods=['POST'])
-def post_job() -> str:
+def post_job() -> dict:
     '''
     This posts a new job to the job database with user defined parameters
 
@@ -365,7 +365,11 @@ def post_job() -> str:
         job_dict (dict): the dictionary containing the info of the job just posted
     '''
     content = request.get_json()
-    def_planet = return_planets()[0] #Default value
+    try:
+        def_planet = return_planets()[0] #Default value
+    except IndexError:
+        logging.error("Database is empty! Did you forget to load the data?")
+        return {"Database is empty! Did you forget to load the data?": 0}
 
     #Check if input is valid
     #This try/except block should catch any key or type errors
@@ -406,21 +410,6 @@ def get_job_info(jid: str) -> dict:
     '''
     return get_job_by_id(jid) 
 
-'''
-#Route to get job result for a specific job id
-@app.route('/results/<string:jid>', methods=['GET'])
-def get_job_result(jid: str) -> dict:
-    
-    This returns the output of the job given the job ID
-
-    Args:
-        jid (str): the job's ID as a string
-    Returns:
-        result_dict (dict): the dictionary containing all the results from a job
-    
-    return get_result(jid)
-'''
-
 @app.route('/download/<string:jid>', methods=['GET'])
 def download(jid: str):
     '''
@@ -445,7 +434,7 @@ def download(jid: str):
         return "Invalid job ID\n"
 
 @app.route('/help', methods=['GET'])
-def help() -> str:
+def help_route() -> str:
     '''
     Returns a list of all available routes with their descriptions and example curl commands.
     
