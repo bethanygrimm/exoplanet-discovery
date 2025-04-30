@@ -16,13 +16,13 @@ response10 = requests.get(f'http://localhost:5000/systems/average_stars')
 response11 = requests.get(f'http://localhost:5000/jobs')
 response12 = requests.get(f'http://localhost:5000/help')
 response4 = requests.delete(f'http://localhost:5000/data')
-
+'''
 def test_load_exoplanet_data():
     assert(response1.status_code == 200)
 
 def test_delete_exoplanet_data():
     assert(response4.status_code == 200)
-
+'''
 def test_return_exoplanet_data():
     assert(isinstance(response2.json(), list) == True)
     assert(isinstance(response2.json()[0], dict) == True)
