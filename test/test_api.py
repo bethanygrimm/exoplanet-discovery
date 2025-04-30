@@ -4,16 +4,18 @@ import os
 import requests
 from api import load_exoplanet_data, return_exoplanet_data, delete_exoplanet_data, return_planets, return_planet_info, num_planets, planets_per_facility, planets_per_year, planets_per_method, avg_planets_per_system, avg_stars_per_system, post_job, get_job_id_list, get_job_info, download, help_route, debug_route
 
-_flask_ip = hostname
-
-response1 = requests.post(f'http://{_flask_ip}:5000/data')
-response2 = requests.get(f'http://{_flask_ip}:5000/data')
-response3 = requests.get(f'http://{_flask_ip}:5000/planets')
-response4 = requests.delete(f'http://{_flask_ip}:5000/data')
-response5 = requests.get(f'http://{_flask_ip}:5000/planets/number')
-response6 = requests.get(f'http://{_flask_ip}:5000/planets/facilities')
-response7 = requests.get(f'http://{_flask_ip}:5000/planets/years')
-response8 = requests.get(f'http://{_flask_ip}:5000/planets/methods')
+response1 = requests.post(f'http://localhost:5000/data')
+response2 = requests.get(f'http://localhost:5000/data')
+response3 = requests.get(f'http://localhost:5000/planets')
+response5 = requests.get(f'http://localhost:5000/planets/number')
+response6 = requests.get(f'http://localhost:5000/planets/facilities')
+response7 = requests.get(f'http://localhost:5000/planets/years')
+response8 = requests.get(f'http://localhost:5000/planets/methods')
+response9 = requests.get(f'http://localhost:5000/planets/average_planets')
+response10 = requests.get(f'http://localhost:5000/systems/average_stars')
+response11 = requests.get(f'http://localhost:5000/jobs')
+response12 = requests.get(f'http://localhost:5000/help')
+response4 = requests.delete(f'http://localhost:5000/data')
 
 def test_load_exoplanet_data():
     assert(response1.status_code == 200)
@@ -29,7 +31,7 @@ def test_return_planets():
     assert(isinstance(response3.json(), list) == True)
 
 def test_num_planets():
-    assert(isinstance(response5.json(), str) == True)
+    assert(isinstance(response5.content.decode("utf-8"), str) == True)
 
 def test_planets_per_facility():
     assert(isinstance(response6.json(), dict) == True)
@@ -39,3 +41,15 @@ def test_planets_per_year():
 
 def test_planets_per_method():
     assert(isinstance(response8.json(), dict) == True) 
+
+def test_avg_planets_per_system():
+    assert(isinstance(response9.content.decode("utf-8"), str) == True)
+
+def test_avg_stars_per_system():
+    assert(isinstance(response10.content.decode("utf-8"), str) == True)
+
+def test_get_job_id_list():
+    assert(isinstance(response11.json(), list) == True)
+
+def test_help_route():
+    assert(isinstance(response12.content.decode("utf-8"), str) == True)
