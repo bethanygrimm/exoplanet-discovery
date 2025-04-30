@@ -82,7 +82,7 @@ def plot_image(jid: str, planet_data: dict, hostname: str,
         n_planets = 1 #Default value
 
     P_SIZE = 10 #in terms of earth radii
-    P_ORBIT = 1 #in terms of earth semi-major axes, or aus
+    P_ORBIT = 10 #in terms of earth semi-major axes, or aus
 
     p_size, p_orbit, p_color, y_p = [], [], [], []
     x_p = np.random.rand(n_planets)
