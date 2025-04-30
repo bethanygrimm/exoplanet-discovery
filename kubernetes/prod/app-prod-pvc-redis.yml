@@ -16,13 +16,13 @@ spec:
     spec:
       containers:
         - name: redis
-          image: ubuntu:22.04
+          image: redis:7
           imagePullPolicy: Always
           command: ['app', 'redis']
           volumeMounts:
-            - name: redis-itstylerbabess-data
+            - name: redis-bethanygrimm-data
               mountPath: "/data"
       volumes:
-        - name: redis-itstylerbabess-data
+        - name: redis-bethanygrimm-data
           persistentVolumeClaim:
-            claimName: redis-itstylerbabess-data
+            claimName: redis-bethanygrimm-data
