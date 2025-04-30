@@ -2,7 +2,7 @@ import pytest
 import json
 import os
 import requests
-from api import load_exoplanet_data, return_exoplanet_data, delete_exoplanet_data, return_planets, return_planet_info, num_planets, planets_per_facility, planets_per_year, planets_per_method, avg_planets_per_system, avg_stars_per_system, post_job, get_job_id_list, get_job_info, download, help_route, debug_route
+#from api import load_exoplanet_data, return_exoplanet_data, delete_exoplanet_data, return_planets, return_planet_info, num_planets, planets_per_facility, planets_per_year, planets_per_method, avg_planets_per_system, avg_stars_per_system, post_job, get_job_id_list, get_job_info, download, help_route, debug_route
 
 response1 = requests.post(f'http://localhost:5000/data')
 response2 = requests.get(f'http://localhost:5000/data')
