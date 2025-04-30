@@ -7,7 +7,7 @@ from typing import List, Tuple
 #import time
 #import sys
 #import math
-from flask import Flask, request
+from flask import Flask, request, send_file
 import redis
 import os
 from datetime import date
@@ -378,37 +378,7 @@ def post_job() -> str:
     if(not (planet in return_planets())):
         print("Planet invalid: defaulting to planet " + str(def_planet))
         planet = def_planet
-    '''
-    #The last valid index will be the current year
-    current_date = date.today()
-    current_year = current_date.year
-    start = 1992
-    end = current_year
     
-    #Check if input is valid
-    #This try/except block should catch any key or type errors
-    try:
-        start = content["start"]
-    except (TypeError, KeyError):
-        print("Input invalid: defaulting to start year 1992")
-    try:
-        end = content["end"]
-    except (TypeError, KeyError):
-        print("Input invalid: defaulting to end year " + str(current_year))
-
-    #Check if input fits data range
-    if(not (isinstance(start, int)) or 
-       ((start < 1992) or (start > current_year))):
-        print("Start year invalid: defaulting to 1992")
-        start = 1992
-    if(not (isinstance(end, int)) or ((end < 1992) or (end > current_year))):
-        print("End year invalid: defaulting to current year")
-        end = current_year
-    if(end < start):
-        print("End year invalid: defaulting to " + str(start))
-        end = start
-    '''
-
     return add_job(planet)
 
 #Route to get all existing job ids
@@ -436,18 +406,43 @@ def get_job_info(jid: str) -> dict:
     '''
     return get_job_by_id(jid) 
 
+'''
 #Route to get job result for a specific job id
 @app.route('/results/<string:jid>', methods=['GET'])
 def get_job_result(jid: str) -> dict:
-    '''
+    
     This returns the output of the job given the job ID
 
     Args:
         jid (str): the job's ID as a string
     Returns:
         result_dict (dict): the dictionary containing all the results from a job
-    '''
+    
     return get_result(jid)
+'''
+
+@app.route('/download/<string:jid>', methods=['GET'])
+def download(jid: str):
+    '''
+    This function returns the path to download the resultant image for a finished
+    job
+
+    Args:
+        jid (str): the job's ID as a string
+    Returns:
+        a warning message, or the filepath where to find the image
+    '''
+    #check if jid is valid
+    if jid in get_job_ids():
+        if get_job_by_id(jid)["status"] == "complete":
+            path = f'/app/{jid}.png'
+            with open(path, 'wb') as f:
+                f.write(get_result(jid))
+            return send_file(path, mimetype='image/png', as_attachment=True)
+        else:
+            return "Job not finished yet\n"
+    else:
+        return "Invalid job ID\n"
 
 @app.route('/help', methods=['GET'])
 def help() -> str:
@@ -506,9 +501,9 @@ Routes:
    - Description: Returns the input parameters and job type for a specific job. Replace <id> with job ID.
    - curl: curl http://localhost:5000/jobs/<id>
 
-12. GET /results/<id>
+12. GET /download/<id>
     - Description: Returns the result of a completed job. Replace <id> with job ID.
-    - curl: curl http://localhost:5000/results/<id>
+    - curl: curl http://localhost:5000/download/<id>
 
 13. GET /help
     - Description: Shows this help message with all available routes.

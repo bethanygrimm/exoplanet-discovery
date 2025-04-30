@@ -147,31 +147,29 @@ def update_job_status(jid: str, status: str) -> None:
     return
 
 #Update these as needed for the image return
-def update_result(jid: str, hkey: str result: dict) -> None:
+def update_result(jid: str, result: bytes) -> None:
     '''
     Update the result of a completed job to database "res"
 
     Args:
         jid (str): a string that is the ID for the job
-        hkey (str): the string for the specific hash
-        result (dict): the result returned by worker script, in JSON format
+        result (dict): the result returned by worker script, an image in bytes
     Returns: none
     '''
-    res.hset(jid, hkey, json.dumps(result))
+    res.set(jid, result)
     return
 
-def get_result(jid: str) -> dict:
+def get_result(jid: str) -> bytes:
     '''
     Returns the result of the job given its jid
 
     Args:
         jid (str): a string that is the ID for the job
     Returns:
-        result_dict (dict): the result of the job
+        result (bytes): the result of the job in bytes
     '''
-
     try:
-        result_dict = json.loads(res.get(jid))
+        return res.get(jid)
     except TypeError:
-        return {"Error: no job found for given ID": 0}
-    return result_dict
+        s = "Error: no job found for given ID"
+        return s.encode("utf-8")
