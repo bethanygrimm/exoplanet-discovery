@@ -1,28 +1,12 @@
-apiVersion: apps/v1
-kind: Deployment
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: redis-pvc-deployment
-  labels:
-    app: redis-pvc-app
+  name: redis-itstylerbabess-data
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: redis-pvc-app
-  template:
-    metadata:
-      labels:
-        app: redis-pvc-app
-    spec:
-      containers:
-        - name: redis
-          image: redis:7
-          imagePullPolicy: Always
-          command: ['app', 'redis']
-          volumeMounts:
-            - name: redis-bethanygrimm-data
-              mountPath: "/data"
-      volumes:
-        - name: redis-bethanygrimm-data
-          persistentVolumeClaim:
-            claimName: redis-bethanygrimm-data
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: cinder-csi
+  resources:
+    requests:
+      storage: 1Gi

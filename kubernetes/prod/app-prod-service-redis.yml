@@ -5,8 +5,8 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: exoplanet-redis
+    app: redis-app
   ports:
-    - name: exoplanet-redis
+    - name: redis-app
       port: 5000
       targetPort: 5000

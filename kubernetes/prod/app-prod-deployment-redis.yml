@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis-deployment
+  name: redis-pvc-deployment
   labels:
     app: redis-app
 spec:
@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: redis
-          image: redis:latest
+          image: redis:7
           ports:
             - containerPort: 6379

@@ -16,12 +16,9 @@ spec:
     spec:
       containers:
         - name: worker
+          imagePullPolicy: Always
           image: bethanygrimm/exoplanet_api:1.0
-          command: ["src/worker.py"]
-          ports:
-            - containerPort: 5000
-          env:
+          command: ["python", "src/worker.py"]
+	  env:
             - name: REDIS_HOST
               value: "exoplanet-redis-service"
-            - name: REDIS_PORT
-              value: "6379"

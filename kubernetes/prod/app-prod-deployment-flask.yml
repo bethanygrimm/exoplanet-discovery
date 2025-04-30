@@ -16,7 +16,12 @@ spec:
     spec:
       containers:
         - name: flask
-#          image: flask
-          command: ["python", "api.py"]
+          image: bethanygrimm/exoplanet_api:1.0
+          command: ["src/api.py"]
           ports:
             - containerPort: 5000
+          env:
+            - name: REDIS_HOST
+              value: "exoplanet-redis-service"
+            - name: REDIS_PORT
+              value: "6379"
