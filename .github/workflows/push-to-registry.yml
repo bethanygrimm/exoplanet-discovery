@@ -29,7 +29,7 @@ jobs:
 
 #ASK WHICH ACCOUNT WE SHOULD USE
 with:
-         images: wjallen/demo-app
+         images: bethanygrimm/exoplanet_api
 
 
      - name: Build and push Docker image
