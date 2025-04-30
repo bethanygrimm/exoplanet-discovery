@@ -37,6 +37,8 @@ def plot_image(jid: str, planet_data: dict, hostname: str,
         n_stars = planet_data["sy_snum"]
     except KeyError:
         n_stars = 1 #Default value
+    if n_stars == None:
+        n_stars = 1 #Default value
     
     STAR_CONST = 1090 #this will be in terms of solar radii. 1090 is a good
     # number for the plot
@@ -54,6 +56,8 @@ def plot_image(jid: str, planet_data: dict, hostname: str,
             st_rad = planet_data["st_rad"]
         except KeyError:
             st_rad = 1
+        if st_rad == None:
+            st_rad = 1
 
         star_size.append(st_rad * STAR_CONST)
         
@@ -62,6 +66,8 @@ def plot_image(jid: str, planet_data: dict, hostname: str,
         try:
             st_teff = planet_data["st_teff"]
         except KeyError:
+            st_teff = 5772 #Sun's temperature in Kelvin - default
+        if st_teff == None:
             st_teff = 5772 #Sun's temperature in Kelvin - default
         if st_teff < 5000:
             star_color.append('lightcoral')
@@ -80,6 +86,8 @@ def plot_image(jid: str, planet_data: dict, hostname: str,
         n_planets = planet_data["sy_pnum"]
     except KeyError:
         n_planets = 1 #Default value
+    if n_planets == None:
+        n_planets = 1 #Default value
 
     P_SIZE = 10 #in terms of earth radii
     P_ORBIT = 10 #in terms of earth semi-major axes, or aus
@@ -94,6 +102,8 @@ def plot_image(jid: str, planet_data: dict, hostname: str,
             pl_rade = host_data[i]["pl_rade"]
         except KeyError:
             pl_rade = 1
+        if pl_rade == None:
+            pl_rade = 1
         
         p_size.append(pl_rade * P_SIZE)
         
@@ -101,6 +111,8 @@ def plot_image(jid: str, planet_data: dict, hostname: str,
         try:
             pl_orbsmax = host_data[i]["pl_orbsmax"]
         except KeyError:
+            pl_orbsmax = 1
+        if pl_orbsmax == None:
             pl_orbsmax = 1
 
         orbit = pl_orbsmax * P_ORBIT
@@ -134,6 +146,8 @@ def plot_image(jid: str, planet_data: dict, hostname: str,
         img = f.read()
 
     update_result(jid, img)
+
+    plt.clf() #clear plot for the next job
 
 @q.worker
 def work(jid: str) -> None:
