@@ -1,40 +1,33 @@
-<h1>Against the Fall of Web Apps</h1>
+<h1>Exoplanet Discovery</h1>
 
 <h2>About the App</h2>
 This app uses data from the NASA Exoplanet Archive to return data about specific exoplanets using a local dynamic database.
 
 <h2>About the Data</h2>
 The data comes from the NASA Exoplanet Archive, and can be accessed <a url="https://exoplanetarchive.ipac.caltech.edu/cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PS">at this link</a>, with many ways to sort and filter the dataset. This app uses the JSON file with the parameter <code>default_flag=1</code>. The reason for this is because the database contains duplicate exoplanets with different values. For each set of duplicates, only one has the default_flag of 1. Thus, this app avoids duplicates and returns default values.<br>
-The data has many headers and is sparsely populated. Some key headers include "pl_name" (name of the planet), "hostname" (name of exoplanet's system), and "disc_year" (year planet was discovered). As for quantitative data, siginifcant headers include "sy_snum" (number of stars in planet's system0, "sy_pnum" (number of planets in planet's system), pl_orbper (planet's orbital period in days), pl_orbsmax (planet's semi-major axis in au, comparable to orbital radius), pl_masse (planet's mass relative to Earth's mass), and sy_dist (distance to system in parsecs).<br>
+The data has many headers and is sparsely populated. Some key headers include "pl_name" (name of the planet), "hostname" (name of exoplanet's system), and "disc_year" (year planet was discovered). As for quantitative data, siginifcant headers include "sy_snum" (number of stars in planet's system), "sy_pnum" (number of planets in planet's system), pl_orbper (planet's orbital period in days), pl_orbsmax (planet's semi-major axis in au, comparable to orbital radius), pl_masse (planet's mass relative to Earth's mass), and sy_dist (distance to system in parsecs).<br>
 More complete documentation can be found <a url="https://exoplanetarchive.ipac.caltech.edu/docs/API_PS_columns.html">at this link</a>.<br>
 DOI: 10.26133/NEA12<br>
 
-<h2>Included Files</h2>
+<h2>Included Files and Directories</h2>
 <ul>
 <li>Dockerfile: used to build the container for this software package</li>
 <li>docker-compose.yml: used to facilitate running the containers</li> 
+<li>Makefile: used to facilitate building, running, and removing containers</li>
 <li>requirements.txt: list of dependencies required to run the containers</li>
 <li>src/api.py: contains all the methods and functions needed for the user to retrieve data. This script utilizes a Flask server so that all commands can be accessed through URL routes.</li>
 <li>src/worker.py: used to keep track of and fulfill all jobs posted via the API</li>
 <li>src/jobs.py: used to initialize the database where exoplanet data is locally stored and track all user-posted jobs</li>
-<li>data/.gitcanary: empty file used to initialize data directory</li>
-<li>test/test_api.py: unit and integration tests for api.py</li>
-<li>test/test_jobs.py: unit tests for jobs.py</li>
-<li>test/test_worker.py: unit tests for worker.py</li>
+<li>test/test_api.py: integration tests for the api</li>
+<li>data/: directory where data will be stored locally</li>
+<li>.github/workflows/: directory where continuous integration tests are contained</li>
+<li>kubernetes/: directory where Kubernetes deployment scripts are contained</li>
 </ul>
 
-<h2>Building Container Image</h2>
+<h2>Building and Running Containers</h2>
 Since code is containerized, no installations are required - just a machine that is capable of running Docker containers. First, ensure Dockerfile, docker_compose.yml, requirements.txt, and the folders src and data are in the same directory. Then, run the command:<br>
-<code>docker build -t [username]/exoplanet_api:1.0 ./</code><br>
-in which [username] is replaced with the user's Docker username.<br>
-The container for the Flask apps has now been built. 
-
-<h2>Running Containers</h2>
-Since there are three containers - the Redis database, the Flask app, and the worker app - that need to be coordinated, docker-compose will facilitate building images of both containers.<br>
-To run the container with docker-compose, first edit the file docker-compose.yml such that all instances of <code>[username]</code> are replaced with your username. Additionally, replace <code>"5000:5000"</code>, <code>"5001:5001"</code>, or <code>"6379:6379"</code> with a different port if their respective ports are already occupied.<br>
-Then run the command:<br>
-<code>docker compose up -d</code>
-All three containers are now running in the background. You may check the status of the containers by running <code>docker ps</code>.
+<code>make all</code><br>
+The container for the Flask apps has now been built, and any previous running containers have been removed. All three containers are now running in the background. you may check the status of the containers by running <code>docker ps</code>.
 
 <h2>API Query Commands and Sample Output</h2>
 There are multiple routes that may be run on this app.<br>
@@ -127,16 +120,66 @@ Alternatively, if ID was not found:<br>
 }
 </pre><br>
 
-<code>curl localhost:5000/jobs -X POST -d '{"start": [start], "end": [end]}' -H "Content-Type: application/json"</code>
-This query allows the user to submit a new job to the task queue, and it returns a dictionary of how many exoplanets are found per discovery method in a span of years. [start] and [end] must be integers correlating to the start and end discovery years from which the user wants data retrieved. The reason why discovery year is used is because it is one of the only headers that has values populated for each row. The program will automatically alter the start and end dates to be in range if they are out of bounds. Sample input and output:<br>
+<code>curl localhost:5000/planets/number</code><br>
+This query returns the number of planets in the database. Sample output:<br>
+<code>There are 5885 exoplanets in the database.</code><br>
+
+<code>curl localhost:5000/planets/facilities</code><br>
+This query returns the number of exoplanets found per facility across the whole database. Sample output:<br>
 <pre>
-curl localhost:5000/jobs -X POST -d '{"start": 2021, "end": 2030}' -H "Content-Type: application/json"
+{
+  "Acton Sky Portal Observatory": 2,
+  "Anglo-Australian Telescope": 35,
+  "Apache Point Observatory": 2,
+  "Arecibo Observatory": 3,
+  "Atacama Large Millimeter Array (ALMA)": 1,
+  ...
+}
+</pre><br>
+
+<code>curl localhost:5000/planets/years</code><br>
+This query returns the number of exoplanets found each year across the whole database. Sample output:<br>
+<pre>
+{
+  "1992": 2,
+  "1994": 1,
+  "1995": 1,
+  "1996": 6,
+  "1997": 1,
+  ...
+}
+</pre><br>
+
+<code>curl localhost:5000/planets/methods</code><br>
+This query returns the number of exoplanets found using each discovery method across the whole database. Sample output:<br>
+<pre>
+{
+  "Astrometry": 5,
+  "Disk Kinematics": 1,
+  "Eclipse Timing Variations": 17,
+  "Imaging": 83,
+  "Microlensing": 237,
+  ...
+}
+</pre><br>
+
+<code>curl localhost:5000/planets/average_planets</code><br>
+This query returns the average number of planets per planetary system in the database. Sample output:<br>
+<code>The average number of planets per system is 1.34</code><br>
+
+<code>curl localhost:5000/systems/average_stars</code><br>
+This query returns the average number of stars per planetary system in the database. Sample output:<br>
+<code>The average number of stars per system is 1.10</code><br>
+
+<code>curl localhost:5000/jobs -X POST -d '{"pl_name": [planet name]}' -H "Content-Type: application/json"</code>
+This query allows the user to submit a new job to the task queue, and it returns a confirmation of the received job. This will generate a diagram of the planetary system, showing the approximate star and planet sizes, star temperatures, and orbital radii, that can be downloaded later. [planet name] must correspond to the name of a planet in the database, or else it will revert to a default. Sample input and output:<br>
+<pre>
+curl localhost:5000/jobs -X POST -d '{"pl_name": "Kepler-592 b"}' -H "Content-Type: application/json"
 </pre><br>
 <pre>
 {
-  "end": 2025,
-  "id": "a7eb2a1b-a9cd-4334-b5b9-f50bafe7f313",
-  "start": 2021,
+  "id": "00be9f8c-1333-4642-9d18-889d13020996",
+  "planet": "Kepler-592 b",
   "status": "submitted"
 }
 </pre><br>
@@ -153,11 +196,9 @@ Alternatively, if data packet invalid:<br>
 This query lists all IDs for jobs submitted by the user for easy access. Sample output:<br>
 <pre>
 [
-  "73bec174-f9a7-451a-9682-fbd354d601f7",
-  "a7eb2a1b-a9cd-4334-b5b9-f50bafe7f313",
-  "ee54244c-5af7-4ac3-82a6-914a483c47fb",
-  "e6688d96-d390-4b6d-9a34-fb32b926d97a",
-  "2a655459-5cee-4138-94e7-722dee93fed3"
+  "00be9f8c-1333-4642-9d18-889d13020996",
+  "e7345cb2-a704-4b30-8f06-3ba2d58160c4",
+  "74d58855-a2ec-4eb7-83d9-93d67d3a5db0"
 ]
 </pre><br>
 
@@ -165,28 +206,26 @@ This query lists all IDs for jobs submitted by the user for easy access. Sample 
 This query lists status and information for a job, given its ID [job_id]. Sample output:<br>
 <pre>
 {
-  "end": 2025,
-  "id": "73bec174-f9a7-451a-9682-fbd354d601f7",
-  "start": 2021,
+  "id": "00be9f8c-1333-4642-9d18-889d13020996",
+  "planet": "Kepler-592 b",
   "status": "complete"
 }
 </pre><br>
 
-<code>curl localhost:5000/results/[job_id]</code>
-This query prints the results of a previously requested job, given its ID [job_id]. This method returns a dictionary - every discovery method used to discover an exoplanet, and the number of exoplanets found with that method, within a given range of discovery years. This method lets users explore which exoplanet discovery methods have gained and lost popularity or relevance over the years. Sample output:<br>
+<code>curl localhost:5000/download/[job_id] --output [output].png</code>
+This query downloads the results of a previously requested job, given its ID [job_id]. The image will be downloaded as [output].png and saved in the working directory, where it can be copied to the user's local machine and viewed with an image viewer. This generates a diagram of the planetary system, showing the approximate star and planet sizes, star temperatures, and orbital radii. Sample input and output:<br>
 <pre>
-{
-  "Astrometry": 4,
-  "Eclipse Timing Variations": 3,
-  "Imaging": 29,
-  "Microlensing": 128,
-  "Orbital Brightness Modulation": 3,
-  "Pulsar Timing": 1,
-  "Radial Velocity": 289,
-  "Transit": 1069,
-  "Transit Timing Variations": 13
-}
-</pre>
+curl localhost:5000/download/00be9f8c-1333-4642-9d18-889d13020996 --output output.png
+</pre><br>
+<pre>
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 14929  100 14929    0     0  4189k      0 --:--:-- --:--:-- --:--:-- 4859k
+</pre><br>
+A <code>ls</code> command should show output.png among the listed files.<br>
+
+<code>curl localhost:5000/help</code>
+This query shows help and documentation for the different routes.<br>
 
 <code>curl localhost:5000/debug</code>
 A simple curl command used to ensure the Flask app is up and running. Sample output:<br>
@@ -194,7 +233,7 @@ A simple curl command used to ensure the Flask app is up and running. Sample out
 
 <h2>Logging and Unit Testing</h2>
 This program includes docstrings and logs. Logs for a certain container may be accessed with <code>docker logs [container_ID]</code>, where [container_ID] may be found from the command <code>docker ps</code>.<br>
-To run unit tests, navigate inside a container with the command <code>docker exec -it [container_id] /bin/bash</code> and then navigate to the source directory using <code>cd src</code>. The command <code>pytest</code> may be used to automatically run all unit and integration tests.<br>
+To run unit tests, navigate inside a container with the command <code>docker exec -it [container_id] /bin/bash</code> and then navigate to the source directory using <code>cd src</code>. The command <code>pytest</code> may be used to automatically run all unit and integration tests. There should be 10 tests that pass.<br>
 
 <h2>Exiting Container</h2>
 After all the desired scripts have been run, use the following commands to stop and remove the containers:<br>
@@ -206,5 +245,4 @@ Software diagram for this application. This application is containerized with Do
 <br>
 
 <h2>Citations</h2>
-Data retrieved from NASA Exoplanet Archive. DOI: 10.26133/NEA12<br>
-No AI was used for this project.
+Data retrieved from NASA Exoplanet Archive. DOI: 10.26133/NEA12
