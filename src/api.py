@@ -492,7 +492,7 @@ Routes:
 
 12. GET /download/<id>
     - Description: Returns the result of a completed job. Replace <id> with job ID.
-    - curl: curl http://localhost:5000/download/<id>
+    - curl: curl http://localhost:5000/download/<id> --output output.png
 
 13. GET /help
     - Description: Shows this help message with all available routes.
