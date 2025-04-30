@@ -21,8 +21,6 @@ services:
       - REDIS_IP=redis-db
       - LOG_LEVEL=WARNING
       - FLASK_IP=flask-ip
-    ports:
-      - "5001:5001"
     command: ["src/worker.py"]
   flask-app:
     build:
