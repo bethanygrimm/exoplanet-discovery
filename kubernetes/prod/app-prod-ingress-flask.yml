@@ -14,6 +14,6 @@ spec:
             path: "/"
             backend:
               service:
-                name: exoplanet-flask-nodeport-service
+                name: exoplanet-flask-service
                 port:
-                  number: 32634
+                  number: 5000

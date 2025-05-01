@@ -17,7 +17,7 @@ spec:
       containers:
         - name: worker
           image: bethanygrimm/exoplanet_api:1.0
-          command: ["python", "src/worker.py"]
+          command: ["src/worker.py"]
           ports:
             - containerPort: 5000
           env:
