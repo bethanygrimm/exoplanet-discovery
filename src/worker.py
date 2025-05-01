@@ -139,7 +139,7 @@ def plot_image(jid: str, planet_data: dict, hostname: str,
     plt.xticks([-1*o_int, 0, o_int])
     plt.yticks([-1*o_int, 0, o_int])
     plt.title(title)
-    plt.xlabel("Distances not to scale.")
+    plt.xlabel("Distances not to scale. Axes labels in 0.1 au.")
     plt.savefig(filename)
 
     with open (filename, 'rb') as f:
