@@ -21,7 +21,7 @@ spec:
           ports:
             - containerPort: 5000
           env:
-            - name: REDIS_HOST
+            - name: REDIS_IP
               value: "exoplanet-redis-service"
             - name: REDIS_PORT
               value: "6379"
