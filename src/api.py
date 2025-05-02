@@ -443,73 +443,7 @@ def help_route() -> str:
         help_text (str): help text with descriptions and curl examples for each route
     '''
     help_text = """
-
-Routes:
--------
-1. GET /data
-   - Description: Returns all exoplanet data from Redis.
-   - curl: curl http://localhost:5000/data
-
-2. GET /planets
-   - Description: Returns a list of all planet names.
-   - curl: curl http://localhost:5000/planets
-
-3. GET /planets/<pl_name>
-   - Description: Returns data for a specific planet. Replace <pl_name> with planet name.
-   - curl: curl http://localhost:5000/planets/<pl_name>
-
-4. GET /planets/number
-   - Description: Returns the total number of planets in the dataset.
-   - curl: curl http://localhost:5000/planets/number
-
-5. GET /planets/facilities
-   - Description: Returns a count of discovery facilities.
-   - curl: curl http://localhost:5000/planets/facilities
-
-6. GET /planets/years
-   - Description: Returns a count of planets discovered by year.
-   - curl: curl http://localhost:5000/planets/years
-
-7. GET /planets/methods
-   - Description: Returns a count of discoveries by method.
-   - curl: curl http://localhost:5000/planets/methods
-
-8. GET /planets/average_planets 
-   - Description: Returns the average number of planets per system. 
-   - curl: curl http://localhost:5000/planets/average_planets
-
-9. GET /systems/average_stars 
-   - Description: Returns the average number of stars per system. 
-   - curl: curl http://localhost:5000/systems/average_stars
-
-10. GET /jobs
-   - Description: Lists all submitted jobs.
-   - curl: curl http://localhost:5000/jobs
-
-11. GET /jobs/<id>
-   - Description: Returns the input parameters and job type for a specific job. Replace <id> with job ID.
-   - curl: curl http://localhost:5000/jobs/<id>
-
-12. GET /download/<id>
-    - Description: Returns the result of a completed job. Replace <id> with job ID.
-    - curl: curl http://localhost:5000/download/<id> --output output.png
-
-13. GET /help
-    - Description: Shows this help message with all available routes.
-    - curl: curl http://localhost:5000/help
-
-14. POST /data
-    - Description: Load exoplanet data into Redis.
-    - curl: curl -X POST http://localhost:5000/data
-
-15. POST /jobs
-    - Description: Submit a job with parameters in JSON format.
-    - curl: curl -X POST -H "Content-Type: application/json" -d '{"pl_name":"Kepler-22 b"}' http://localhost:5000/jobs
-
-16. DELETE /data
-    - Description: Remove all data from Redis.
-    - curl: curl -X DELETE http://localhost:5000/data
-
+Routes:\n-------\n1. GET /data\n   - Description: Returns all exoplanet data from Redis.\n   - curl: curl http://localhost:5000/data\n\n2. GET /planets\n   - Description: Returns a list of all planet names.\n   - curl: curl http://localhost:5000/planets\n\n3. GET /planets/<pl_name>\n   - Description: Returns data for a specific planet. Replace <pl_name> with planet name.\n   - curl: curl http://localhost:5000/planets/<pl_name>\n\n4. GET /planets/number\n   - Description: Returns the total number of planets in the dataset.\n   - curl: curl http://localhost:5000/planets/number\n\n5. GET /planets/facilities\n   - Description: Returns a count of discovery facilities.\n   - curl: curl http://localhost:5000/planets/facilities\n\n6. GET /planets/years\n   - Description: Returns a count of planets discovered by year.\n   - curl: curl http://localhost:5000/planets/years\n\n7. GET /planets/methods\n   - Description: Returns a count of discoveries by method.\n   - curl: curl http://localhost:5000/planets/methods\n\n8. GET /planets/average_planets \n   - Description: Returns the average number of planets per system.\n   - curl: curl http://localhost:5000/planets/average_planets\n\n9. GET /systems/average_stars \n   - Description: Returns the average number of stars per system.\n   - curl: curl http://localhost:5000/systems/average_stars\n\n10. GET /jobs\n   - Description: Lists all submitted jobs.\n   - curl: curl http://localhost:5000/jobs\n\n11. GET /jobs/<id>\n   - Description: Returns the input parameters and job type for a specific job. Replace <id> with job ID.\n   - curl: curl http://localhost:5000/jobs/<id>\n\n12. GET /download/<id>\n    - Description: Returns the result of a completed job. Replace <id> with job ID.\n    - curl: curl http://localhost:5000/download/<id> --output output.png\n\n13. GET /help\n    - Description: Shows this help message with all available routes.\n    - curl: curl http://localhost:5000/help\n\n14. POST /data\n    - Description: Load exoplanet data into Redis.\n    - curl: curl -X POST http://localhost:5000/data\n\n15. POST /jobs\n    - Description: Submit a job with parameters in JSON format.\n    - curl: curl -X POST -H "Content-Type: application/json" -d '{"pl_name":"Kepler-22 b"}' http://localhost:5000/jobs\n\n16. DELETE /data\n    - Description: Remove all data from Redis.\n    - curl: curl -X DELETE http://localhost:5000/data\n
 """
     return help_text
 
