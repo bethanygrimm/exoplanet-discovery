@@ -30,7 +30,7 @@ Since code is containerized, no installations are required - just a machine that
 The container for the Flask apps has now been built, and any previous running containers have been removed. All three containers are now running in the background. you may check the status of the containers by running <code>docker ps</code>.
 
 <h2>API Query Commands and Sample Output</h2>
-There are multiple routes that may be run on this app.<br>
+There are multiple routes that may be run on this app withint the terminal.<br>
 <code>curl -X POST localhost:5000/data</code><br>
 Running this query before any others is highly recommended, as the data needs to be loaded before being able to run any meaningful analyses. This route loads the entire dataset into the user's local /data directory. Sample output:<br>
 <code>Data load succeeded</code> if load successful<br>
@@ -230,6 +230,15 @@ This query shows help and documentation for the different routes.<br>
 <code>curl localhost:5000/debug</code>
 A simple curl command used to ensure the Flask app is up and running. Sample output:<br>
 <code>Hello, world!</code><br><br>
+
+<h2>Kubernetes</h2>
+Kubernetes (k8s) is a powerful container orchestration platform that automates the deployment, scaling, and management of distributed applications. In this exoplanet web app, Kubernetes organizes and manages the three key components—the Flask API, the Redis database, and the worker service—by running them in separate containers, or pods, within a cluster. This setup enables easy updates, fault tolerance, as well scalability.
+
+Deployments are used in this app to maintain the state of services by managing pod replicas. NodePort servicesare utilized, as well, to expose the containerized applications externally. To provide clean, user-friendly access, an Ingress is present to route external HTTP requests internally. In this app, Ingress also exposes the Flask API publicly through subdomain-based URLs.
+
+<h3>Publicly accessible routes:</h3>
+(to use each URL, substitute <subdomain> with 'itstylerbabess'. This username is how TACC uniquely identifies and maps traffic to specific app.)
+
 
 <h2>Logging and Unit Testing</h2>
 This program includes docstrings and logs. Logs for a certain container may be accessed with <code>docker logs [container_ID]</code>, where [container_ID] may be found from the command <code>docker ps</code>.<br>
