@@ -238,7 +238,54 @@ Deployments are used in this app to maintain the state of services by managing p
 
 <h3>Publicly accessible routes:</h3>
 (to use each URL, substitute <subdomain> with 'itstylerbabess'. This username is how TACC uniquely identifies and maps traffic to specific app.)
+<hr>
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/data</code><br>
+Returns all exoplanet data currently stored in Redis.<br>
 
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/planets</code><br>
+Returns a list of all exoplanet names.<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/planets/[pl_name]</code><br>
+Returns data for the planet with name [pl_name]. The planet name must be in quotes, and any spaces must be replaced with <code>%20</code> (example: <code>"Kepler-33%20f"</code>).<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/planets/number</code><br>
+Returns the total number of exoplanets in the dataset.<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/planets/facilities</code><br>
+Returns a count of exoplanets discovered by facility.<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/planets/years</code><br>
+Returns a count of exoplanets discovered by year.<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/planets/methods</code><br>
+Returns a count of exoplanets discovered by method.<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/planets/average_planets</code><br>
+Returns the average number of planets per system.<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/systems/average_stars</code><br>
+Returns the average number of stars per system.<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/jobs</code><br>
+Lists all submitted job entries.<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/jobs/[id]</code><br>
+Returns job details for the job with ID [id].<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/download/[id]</code><br>
+Returns the output of the job with ID [id] if completed.<br>
+
+<code>curl http://<subdomain>-flask.coe332.tacc.cloud/help</code><br>
+Displays a list of all available API routes with descriptions.<br>
+
+<code>curl -X POST http://<subdomain>-flask.coe332.tacc.cloud/data</code><br>
+Loads the exoplanet dataset into Redis (if not already loaded).<br>
+
+<code>curl -X POST -H "Content-Type: application/json" -d '{"job_type": "...", "pl_name": "..."}' http://<subdomain>-flask.coe332.tacc.cloud/jobs</code><br>
+Submits a new job with input parameters.<br>
+
+<code>curl -X DELETE http://<subdomain>-flask.coe332.tacc.cloud/data</code><br>
+Deletes all exoplanet data from Redis.<br>
 
 <h2>Logging and Unit Testing</h2>
 This program includes docstrings and logs. Logs for a certain container may be accessed with <code>docker logs [container_ID]</code>, where [container_ID] may be found from the command <code>docker ps</code>.<br>
