@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment-test
+  labels:
+    app: flask-app-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app-test
+  template:
+    metadata:
+      labels:
+        app: flask-app-test
+    spec:
+      containers:
+        - name: flask
+          image: bethanygrimm/exoplanet_api:1.0
+          command: ["src/api.py"]
+          ports:
+            - containerPort: 5000
+          env:
+            - name: REDIS_IP
+              value: "exoplanet-redis-service-test"
+            - name: REDIS_PORT
+              value: "6379"

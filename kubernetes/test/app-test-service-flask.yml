@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: exoplanet-flask-service-test
+spec:
+  type: ClusterIP
+  selector:
+    app: exoplanet-flask-test
+  ports:
+    - name: exoplanet-flask-test
+      port: 5000
+      targetPort: 5000

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-pvc-deployment-test
+  labels:
+    app: redis-app-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-app-test
+  template:
+    metadata:
+      labels:
+        app: redis-app-test
+    spec:
+      containers:
+        - name: redis
+          image: redis:7
+          ports:
+            - containerPort: 6379

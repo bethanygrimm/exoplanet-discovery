@@ -1,0 +1,12 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: exoplanet-flask-nodeport-service-test
+spec:
+  type: NodePort
+  selector:
+    app: flask-app-test
+  ports:
+    - port: 5000
+      targetPort: 5000
