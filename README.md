@@ -232,9 +232,9 @@ A simple curl command used to ensure the Flask app is up and running. Sample out
 <code>Hello, world!</code><br><br>
 
 <h2>Kubernetes</h2>
-Kubernetes (k8s) is a powerful container orchestration platform that automates the deployment, scaling, and management of distributed applications. In this exoplanet web app, Kubernetes organizes and manages the three key components—the Flask API, the Redis database, and the worker service—by running them in separate containers, or pods, within a cluster. This setup enables easy updates, fault tolerance, as well scalability.
+Kubernetes (k8s) is a powerful container orchestration platform that automates the deployment, scaling, and management of distributed applications. In this exoplanet web app, Kubernetes organizes and manages the three key components—the Flask API, the Redis database, and the worker service—by running them in separate containers, or pods, within a cluster. This setup enables easy updates, fault tolerance, as well scalability.<br>
 
-Deployments are used in this app to maintain the state of services by managing pod replicas. NodePort servicesare utilized, as well, to expose the containerized applications externally. To provide clean, user-friendly access, an Ingress is present to route external HTTP requests internally. In this app, Ingress also exposes the Flask API publicly through subdomain-based URLs.
+Deployments are used in this app to maintain the state of services by managing pod replicas. NodePort servicesare utilized, as well, to expose the containerized applications externally. To provide clean, user-friendly access, an Ingress is present to route external HTTP requests internally. In this app, Ingress also exposes the Flask API publicly through subdomain-based URLs. For each prod/ Kubernetes deployment, service, and ingress, there is a test deployment, service, and ingress which allows for app health checks, pre-production testing/debugging, image validation, etc. These are assessable via test paths and ports.
 
 <h3>Publicly accessible routes:</h3>
 (to use each URL, substitute [subdomain] with 'itstylerbabess'. This is how TACC uniquely identifies and maps traffic to this specific app.)
