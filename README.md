@@ -281,7 +281,7 @@ Displays a list of all available API routes with descriptions.<br>
 <code>curl -X POST http://[subdomain]-flask.coe332.tacc.cloud/data</code><br>
 Loads the exoplanet dataset into Redis (if not already loaded).<br>
 
-<code>curl -X POST -H "Content-Type: application/json" -d '{"job_type": "...", "pl_name": "..."}' http://[subdomain]-flask.coe332.tacc.cloud/jobs</code><br>
+<code>curl -X POST -H "Content-Type: application/json" -d '{"pl_name": "..."}' http://[subdomain]-flask.coe332.tacc.cloud/jobs</code><br>
 Submits a new job with input parameters.<br>
 
 <code>curl -X DELETE http://[subdomain]-flask.coe332.tacc.cloud/data</code><br>
@@ -332,7 +332,7 @@ Displays a list of all available API routes with descriptions.<br>
 <code>curl -X POST http://itstylerbabess-flask.coe332.tacc.cloud/data</code><br>
 Loads the exoplanet dataset into Redis (if not already loaded).<br>
 
-<code>curl -X POST -H "Content-Type: application/json" -d '{"job_type": "...", "pl_name": "..."}' http://itstylerbabess-flask.coe332.tacc.cloud/jobs</code><br>
+<code>curl -X POST -H "Content-Type: application/json" -d '{"pl_name": "..."}' http://itstylerbabess-flask.coe332.tacc.cloud/jobs</code><br>
 Submits a new job with input parameters.<br>
 
 <code>curl -X DELETE http://itstylerbabess-flask.coe332.tacc.cloud/data</code><br>
