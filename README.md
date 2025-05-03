@@ -351,7 +351,7 @@ After all the desired scripts have been run, use the following commands to stop 
 Software diagram for this application. This application is deployed on Kubernetes with a series of deployments, services, and persistent volume claims. Much of the work is done inside the containerized pods, which are automatically built with an image on Dockerhub. This image is pushed automatically when the developer pushes a new tag onto Github; additionally, unit tests are automatically run on every push. Via an ingress, the user can access the Flask routes with curl commands, and output is given to the user on the browser. The Flask app retrieves data from the Redis app, which persistently stores data, job info, and results on a persistent volume claim. When the user posts a job, the worker app retrieves job data from Redis, executes the job, and then updates the results database.
 <br>
 
-<h2>Notes<h2>
+<h3>Notes</h3>
 This project strives to adhere to best practices in software design and documentation, with guidance from ChatGPT to structure the README and Write Up, as well as for debugging.
 <br>
 
