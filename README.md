@@ -347,8 +347,8 @@ After all the desired scripts have been run, use the following commands to stop 
 <code>docker compose down</code><br>
 
 <h2>Software Diagram</h2>
-<img src="https://github.com/bethanygrimm/coe332/blob/58f7a468484522b68a305aa6f565a25fef925214/homework08/COE332%20HW%2008%20Diagram.drawio.png" alt="Software Diagram">
-Software diagram for this application. This application is containerized with Docker. The user can access the Flask routes with curl commands, and output is given to the user on the terminal. Additionally, the Redis container persistently backs up data to the user's machine, since the path /data is mounted to the container. The containers - Redis, Flask, and the worker - are each mounted to a different port. Redis houses the databases for raw data, job metadata, job queue, and job results. The Flask container relies on the Redis container to retrieve exoplanet data, and is able to load and delete exoplanet data. The worker container relies on the Redis container to retrieve job information, and it updates job status and results when finished.
+<img src="https://github.com/bethanygrimm/exoplanet-discovery/blob/ec0e0b82ff5d46642efa2f6f3d5c3fdf83b82693/Exoplanet%20Discovery%20Software%20Diagram.png" alt="Software Diagram">
+Software diagram for this application. This application is deployed on Kubernetes with a series of deployments, services, and persistent volume claims. Much of the work is done inside the containerized pods, which are automatically built with an image on Dockerhub. This image is pushed automatically when the developer pushes a new tag onto Github; additionally, unit tests are automatically run on every push. Via an ingress, the user can access the Flask routes with curl commands, and output is given to the user on the browser. The Flask app retrieves data from the Redis app, which persistently stores data, job info, and results on a persistent volume claim. When the user posts a job, the worker app retrieves job data from Redis, executes the job, and then updates the results database.
 <br>
 
 <h2>Citations</h2>
